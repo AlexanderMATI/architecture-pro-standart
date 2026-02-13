@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Context>
+
+skinparam {
+    backgroundColor #FAFAFA
+    roundCorner 20
+    shadowing true
+    wrapWidth 200
+}
+LAYOUT_WITH_LEGEND()
+
+title Диаграмма контекста
+
+Person(client, "Клиент", "Физическое лицо, клиент банка")
+Person(front_office, "Сотрудник отделения", "Работает в АБС, оформляет депозиты")
+Person(back_office_dep, "Сотрудник бэк-офиса (депозиты)", "Управляет ставками, обрабатывает заявки")
+Person(back_office_credit, "Сотрудник бэк-офиса (кредиты)", "Участвует в расчёте ставок (кредитный риск)")
+Person(cc_operator, "Сотрудник кол-центра", "Обрабатывает заявки с сайта")
+
+System(site, "Сайт банка", "Публичный информационный портал")
+System(internet_bank, "Интернет-банк", "Существующая ДБО-система")
+System(dors, "Сервис депозитных заявок", "Новый микросервис для приёма заявок")
+System(abs, "АБС", "Автоматизированная банковская система")
+System(cc_system, "Система кол-центра", "CRM для операторов")
+
+Rel(client, site, "Просматривает ставки, подаёт заявку", "HTTPS")
+Rel(client, internet_bank, "Подаёт заявку, подтверждает СМС", "HTTPS")
+
+Rel(site, dors, "Передаёт заявку", "REST")
+Rel(internet_bank, dors, "Передаёт заявку", "REST")
+
+Rel(dors, abs, "Асинхронная передача заявок", "Kafka")
+Rel(cc_system, abs, "Запрос данных по заявке", "Существующий интерфейс")
+Rel(front_office, abs, "Создание депозита, загрузка документов", "UI АБС")
+Rel(back_office_dep, abs, "Управление ставками", "UI АБС")
+Rel(back_office_credit, abs, "Расчёт кредитного риска", "UI АБС")
+
+Rel(cc_operator, cc_system, "Работает с заявками", "")
+
+@enduml

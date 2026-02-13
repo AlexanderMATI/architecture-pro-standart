@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Container>
+
+skinparam {
+    backgroundColor #FAFAFA
+    roundCorner 20
+    shadowing true
+    wrapWidth 200
+}
+
+LAYOUT_WITH_LEGEND()
+
+title Диаграмма контейнеров
+
+Person(client, "Клиент")
+
+System_Ext(site, "Сайт", "PHP")
+System_Ext(internet_bank, "Интернет-банк", "ASP.NET")
+System_Ext(cc_system, "Система кол-центра", "CRM для операторов")
+System_Ext(abs, "АБС", "Oracle, Delphi")
+
+System_Boundary(dors, "Сервис открытия депозитов") {
+    Container(api, "API-приложение", "Java", "Принимает заявки от сайта")
+    ContainerDb(db, "База данных заявок", "MS SQL", "Хранит статусы и метаданные заявок")
+}
+
+ContainerDb(staging_db, "Промежуточная БД", "PostgreSQL", "Таблица для асинхронной передачи заявок в АБС")
+
+Rel(client, site, "Подаёт заявку", "HTTPS")
+Rel(client, internet_bank, "Подаёт заявку", "HTTPS")
+
+Rel(site, api, "Отправляет заявку", "JSON/HTTPS")
+Rel(internet_bank, api, "Отправляет заявку", "JSON/HTTPS")
+
+Rel(api, db, "Сохраняет/читает заявку", "JDBC")
+Rel(api, cc_system, "Создаёт обращение", "API")
+Rel(api, staging_db, "Записывает заявку для передачи в АБС", "JDBC")
+
+
+Rel(abs, staging_db, "Читает новые заявки", "ETL")
+
+
+@enduml
