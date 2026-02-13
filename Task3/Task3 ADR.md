@@ -59,7 +59,7 @@
 
 #### **Диаграмма контекста (C4 — Context)**
 
-*Файл:
+*Файл: [Диаграмма контекста](https://github.com/AlexanderMATI/architecture-pro-standart/blob/main/Task3/Task3%20Context.puml)
 
 **Описание диаграммы контекста:**
 
@@ -90,7 +90,7 @@
 
 #### **Диаграмма контейнеров (C4 — Containers)**
 
-*Файл: 
+*Файл: [Диаграмма контейнеров](https://github.com/AlexanderMATI/architecture-pro-standart/blob/main/Task3/Task3%20Container.puml)
 
 **Описание диаграммы контейнеров:**
 
